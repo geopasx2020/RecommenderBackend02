@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import RecommendationSystem.RecommenderBackend.pois.PoiService;
+import org.springframework.web.servlet.view.RedirectView;
+
 import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,6 +35,7 @@ public class PoiController {
 
     @GetMapping
     public List<Poi> getPois() {
+
         return poiService.getPois();
     }
 
@@ -57,12 +61,21 @@ public class PoiController {
 
         return  poiService.updatePoi(poi);
     }
+    @PostMapping("/save")
+    public RedirectView savePoi(Poi poi,
+                                 @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
-//    @PutMapping("/updatePoi")
-//    public User updatePoi(@RequestBody Poi poi){
-//
-//        return  poiService.updatePoi(poi);
-//    }
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        poi.setPhotos(fileName);
+
+        Poi savedPoi = poiRepository.save(poi);
+
+        String uploadDir = "poi-photos/" + savedPoi.getId();
+
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+        return new RedirectView("/poi", true);
+    }
 
 
 
