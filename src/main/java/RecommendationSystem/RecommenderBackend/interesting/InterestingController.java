@@ -14,6 +14,7 @@ public class InterestingController {
 
     @GetMapping
     List<Interesting> getinterestings() {
+
         return interestingRepository.findAll();
     }
 

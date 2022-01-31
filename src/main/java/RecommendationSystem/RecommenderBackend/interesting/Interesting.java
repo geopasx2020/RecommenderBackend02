@@ -19,6 +19,17 @@ public class Interesting {
     @Column(name="description")
     private String description;
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    @Column(name="imagePath")
+    private String imagePath;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "selectedInterestings",cascade = CascadeType.PERSIST)
 

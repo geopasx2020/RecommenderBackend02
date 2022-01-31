@@ -5,6 +5,7 @@ import RecommendationSystem.RecommenderBackend.pois.PoiService;
 import RecommendationSystem.RecommenderBackend.pois.Poi;
 import RecommendationSystem.RecommenderBackend.pois.PoiRepository;
 import RecommendationSystem.RecommenderBackend.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.aspectj.bridge.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,11 +36,7 @@ public class PoiController {
         return poiService.getPois();
     }
 
-    @PostMapping
-    public void registerNewPoi(@RequestBody Poi poi) {
 
-        poiService.addNewPoi(poi);
-    }
 
     @DeleteMapping(path = "{poiId}")
     public void deletePoi(@PathVariable("poiId") Long poiId) {
@@ -58,11 +55,11 @@ public class PoiController {
         return  poiService.updatePoi(poi);
     }
 
-//    @PutMapping("/updatePoi")
-//    public User updatePoi(@RequestBody Poi poi){
-//
-//        return  poiService.updatePoi(poi);
-//    }
+    @JsonIgnore
+    @GetMapping({ "/{category}" })
+    public List<Poi> login(@PathVariable String category) {
+        return poiRepository.findByCategory(category);
+    }
 
 
 

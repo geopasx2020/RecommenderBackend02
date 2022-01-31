@@ -22,12 +22,7 @@ public List<Poi> getPois()
     return poiRepository.findAll();
 }
 
-    public void addNewPoi(Poi poi) {
-        Optional<Poi> poiOptional=poiRepository
-                .findPoiByTitle(poi.getTitle());
 
-        poiRepository.save(poi);
-    }
 
 public String deletePoi(Long poiId) {
         String message;
@@ -56,8 +51,7 @@ public String deletePoi(Long poiId) {
         pnt.setStartTime(poi.getStartTime());
         pnt.setEndTime(poi.getEndTime());
         pnt.setIndoor(poi.getIndoor());
-        Optional<Poi> userOptional=poiRepository
-                .findPoiByTitle(poi.getTitle());
+
         return poiRepository.save(pnt);
 
     }

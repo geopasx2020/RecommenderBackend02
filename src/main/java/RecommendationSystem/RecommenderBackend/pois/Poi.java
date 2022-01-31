@@ -1,5 +1,9 @@
 package RecommendationSystem.RecommenderBackend.pois;
 
+
+
+
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -20,27 +24,7 @@ public class Poi {
     private String category;
 
     @Column(name="time_start")
-    private LocalTime startTime;
-
-    @Column(name="time_end")
-    private LocalTime endTime;
-    @Column(name="indoor")
-    private String indoor;
-
-
-    public Poi(){
-
-    }
-
-    public Poi(Long id, String title, String category, LocalTime startTime, LocalTime endTime, String indoor) {
-        Id = id;
-        this.title = title;
-        this.category = category;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.indoor = indoor;
-
-    }
+    private String startTime;
 
     @Override
     public String toString() {
@@ -48,13 +32,52 @@ public class Poi {
                 "Id=" + Id +
                 ", title='" + title + '\'' +
                 ", category='" + category + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", indoor='" + indoor + '\'' +
+                ", startTime='" + startTime + '\'' +
 
+                ", endTime='" + endTime + '\'' +
+                ", indoor='" + indoor + '\'' +
+                ", imagePath='" + imagePath + '\'' +
                 '}';
     }
 
+
+
+
+
+
+
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        imagePath = imagePath;
+    }
+
+    @Column(name="time_end")
+    private String endTime;
+    @Column(name="indoor")
+    private String indoor;
+
+    @Column
+    private String imagePath;
+
+
+    public Poi(){
+
+    }
+
+    public Poi(Long id, String title, String category, String startTime, String endTime, String indoor, String imagePath) {
+        Id = id;
+        this.title = title;
+        this.category = category;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.indoor = indoor;
+        this.imagePath=imagePath;
+
+    }
 
 
     public Poi(String originalFilename, String contentType, byte[] compressBytes) {
@@ -81,33 +104,38 @@ public class Poi {
         return category;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     public String getIndoor() {
+
         return indoor;
     }
 
     public void setIndoor(String indoor) {
+
         this.indoor = indoor;
     }
 
     public void setCategory(String category) {
+
         this.category = category;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
 
 
 

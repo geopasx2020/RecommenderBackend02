@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PoiRepository extends JpaRepository<Poi,Long> {
     //select * from student where email=?
-    @Query("SELECT  p FROM Poi p WHERE p.title=?1")
-    Optional<Poi> findPoiByTitle(String title);
+    List<Poi> findByCategory(String category);
 }
