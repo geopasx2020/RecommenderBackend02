@@ -47,10 +47,11 @@ public String deletePoi(Long poiId) {
         pnt.setTitle(poi.getTitle());
 
         pnt.setTitle(poi.getTitle());
-        pnt.setCategory(poi.getCategory());
+//        pnt.setCategory(poi.getCategory());
         pnt.setStartTime(poi.getStartTime());
         pnt.setEndTime(poi.getEndTime());
         pnt.setIndoor(poi.getIndoor());
+        pnt.setPoiCategory(poi.getPoiCategory());
 
         return poiRepository.save(pnt);
 

@@ -1,6 +1,6 @@
 package RecommendationSystem.RecommenderBackend.pois;
 
-
+//--14/2/2022--
 
 
 
@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import RecommendationSystem.RecommenderBackend.poisCategory.poiCategory;
 
 @Entity
 @Table(name="poi")
@@ -26,26 +27,6 @@ public class Poi {
     @Column(name="time_start")
     private String startTime;
 
-    @Override
-    public String toString() {
-        return "Poi{" +
-                "Id=" + Id +
-                ", title='" + title + '\'' +
-                ", category='" + category + '\'' +
-                ", startTime='" + startTime + '\'' +
-
-                ", endTime='" + endTime + '\'' +
-                ", indoor='" + indoor + '\'' +
-                ", imagePath='" + imagePath + '\'' +
-                '}';
-    }
-
-
-
-
-
-
-
 
     public String getImagePath() {
         return imagePath;
@@ -63,12 +44,24 @@ public class Poi {
     @Column
     private String imagePath;
 
+    public RecommendationSystem.RecommenderBackend.poisCategory.poiCategory getPoiCategory() {
+        return poiCategory;
+    }
+
+    public void setPoiCategory(RecommendationSystem.RecommenderBackend.poisCategory.poiCategory poiCategory) {
+        this.poiCategory = poiCategory;
+    }
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="category_id")
+    private poiCategory poiCategory;
+
 
     public Poi(){
 
     }
 
-    public Poi(Long id, String title, String category, String startTime, String endTime, String indoor, String imagePath) {
+    public Poi(Long id, String title, String category, String startTime, String endTime, String indoor, String imagePath,poiCategory poiCategory) {
         Id = id;
         this.title = title;
         this.category = category;
@@ -76,6 +69,7 @@ public class Poi {
         this.endTime = endTime;
         this.indoor = indoor;
         this.imagePath=imagePath;
+        this.poiCategory=poiCategory;
 
     }
 
@@ -87,6 +81,19 @@ public class Poi {
         return title;
     }
 
+    @Override
+    public String toString() {
+        return "Poi{" +
+                "Id=" + Id +
+                ", title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", indoor='" + indoor + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", poiCategory=" + poiCategory +
+                '}';
+    }
 
     public Long getId() {
         return Id;
