@@ -10,6 +10,8 @@ import java.util.List;
 public class PoiController {
     @Autowired
     private PoiRepository poiRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     PoiService poiService;
@@ -44,6 +46,18 @@ public class PoiController {
     public Poi getPoi(@PathVariable("id") Long id) {
 
         return poiRepository.findById(id).get();
+    }
+
+    @PostMapping("/{id}/review")
+    public Poi reviewPoi(@PathVariable("id") Long poiId, @RequestBody Review review){
+        System.out.println(review.getScore());
+        Poi poi = poiRepository.findById(poiId).get();
+        //Review review = new Review();
+        review.setPoi(poi);
+//        review.setScore(score);
+        reviewRepository.save(review);
+         return poi;
+        //return  poiService.updatePoi(poi);
     }
 
 
