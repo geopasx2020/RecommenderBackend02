@@ -68,8 +68,8 @@ public class UserController {
 
     @JsonIgnore
     @GetMapping({ "/User/{email}/{password}/{role}" })
-    public List<User> login(@PathVariable String email,@PathVariable String password,@PathVariable String role) {
-        return userRepository.findByEmailAndPasswordAndRole(email, password,role);
+    public User login(@PathVariable String email,@PathVariable String password,@PathVariable String role) {
+        return userRepository.findByEmailAndPasswordAndRole(email, password,role).get(0);
     }
 //*****************************************
     @PostMapping("/createInteresting")

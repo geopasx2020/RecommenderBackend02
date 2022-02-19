@@ -22,6 +22,11 @@ public List<Poi> getPois()
     return poiRepository.findAll();
 }
 
+    public List<Poi> getRecommendations()
+    {
+        return poiRepository.findAll();
+    }
+
 
 
 public String deletePoi(Long poiId) {

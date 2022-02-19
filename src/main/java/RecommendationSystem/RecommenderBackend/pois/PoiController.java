@@ -1,4 +1,6 @@
 package RecommendationSystem.RecommenderBackend.pois;
+import RecommendationSystem.RecommenderBackend.user.User;
+import RecommendationSystem.RecommenderBackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ public class PoiController {
 
     @Autowired
     PoiService poiService;
+    @Autowired
+    UserService userService;
+
 
     @GetMapping
     public List<Poi> getPois() {
@@ -48,22 +53,38 @@ public class PoiController {
         return poiRepository.findById(id).get();
     }
 
+    /*
+    HTTP1
+    GET
+    /api/poi/23/review?p=2
+    Accept-Langaue: en
+
+    {score: 2}
+     */
     @PostMapping("/{id}/review")
-    public Poi reviewPoi(@PathVariable("id") Long poiId, @RequestBody Review review){
-        System.out.println(review.getScore());
+    public Poi reviewPoi(@PathVariable("id") Long poiId, @RequestBody RecommendationSystem.RecommenderBackend.dto.Review frontReview){
+        System.out.println(frontReview.getScore());
+        User user = userService.getUserById(frontReview.getUserId());
         Poi poi = poiRepository.findById(poiId).get();
-        //Review review = new Review();
-        review.setPoi(poi);
-//        review.setScore(score);
-        reviewRepository.save(review);
+
+        Review existingReview = reviewRepository.findByUserAndPoi(user, poi);
+        if(existingReview == null) {
+            Review review = new Review(poi, frontReview.getScore(), user);
+            //Review review = new Review();
+            //        review.setScore(score);
+            reviewRepository.save(review);
+        }else{
+            existingReview.setScore(frontReview.getScore());
+            reviewRepository.save(existingReview);
+        }
          return poi;
         //return  poiService.updatePoi(poi);
     }
 
-
-
-
-
+    @GetMapping(path = "/recommendations")
+    public List<Poi> getRecommendations() {
+        return poiService.getPois();
+    }
 
 
 }
