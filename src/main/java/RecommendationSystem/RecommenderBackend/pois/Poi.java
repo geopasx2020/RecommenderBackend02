@@ -23,6 +23,7 @@ public class Poi {
 
     @Column(name = "category")
     private String category;
+    //private Category category;
 
     @Column(name="time_start")
     private String startTime;

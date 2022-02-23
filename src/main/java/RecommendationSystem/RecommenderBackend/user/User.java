@@ -76,7 +76,7 @@ public class User {
             joinColumns =@JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="interesting_id")
     )
-   Set<Interesting> selectedInterestings;
+    Set<Interesting> selectedInterestings;
 
     public User(){
 
@@ -174,9 +174,9 @@ public class User {
         this.age = age;
     }
 
-    public Set<Interesting> getEnrolledInterestings() {
-        return selectedInterestings;
-    }
+//    public Set<Interesting> getEnrolledInterestings() {
+//        return selectedInterestings;
+//    }
 
 
 

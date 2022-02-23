@@ -4,6 +4,7 @@ import RecommendationSystem.RecommenderBackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -81,8 +82,14 @@ public class PoiController {
         //return  poiService.updatePoi(poi);
     }
 
-    @GetMapping(path = "/recommendations")
-    public List<Poi> getRecommendations() {
+    @GetMapping(path = "/recommendations/{userId}/")
+    public List<Poi> getRecommendations(@PathVariable("userId") long userId) {
+        //copy from users with similar
+        //pois in interesting categories
+        User user = userService.getUserById(userId);
+        user.getInterestings();
+
+
         return poiService.getPois();
     }
 
