@@ -2,9 +2,8 @@ package RecommendationSystem.RecommenderBackend.UserInteresting;
 
 
 import RecommendationSystem.RecommenderBackend.dto.InterestingRequest;
-import RecommendationSystem.RecommenderBackend.dto.InterestingResponse;
 
-import RecommendationSystem.RecommenderBackend.interesting.InterestingRepository;
+import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
 import RecommendationSystem.RecommenderBackend.user.User;
 import RecommendationSystem.RecommenderBackend.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class UserInterestingController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private InterestingRepository interestingRepository;
+    private CategoryRepository categoryRepository;
 
 
 
@@ -35,7 +34,7 @@ public class UserInterestingController {
 
     @DeleteMapping(path = "/deleteInterestings/{userId}")
     public void deleteInterestingsByUserId(@PathVariable("userId") Long userId) {
-        interestingRepository.deleteById(userId);
+        categoryRepository.deleteById(userId);
     }
 
 

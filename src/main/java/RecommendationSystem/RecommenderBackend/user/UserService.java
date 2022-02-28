@@ -1,18 +1,11 @@
 package RecommendationSystem.RecommenderBackend.user;
-import RecommendationSystem.RecommenderBackend.interesting.Interesting;
-import RecommendationSystem.RecommenderBackend.interesting.InterestingRepository;
-import RecommendationSystem.RecommenderBackend.interesting.InterestingService;
+import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
+import RecommendationSystem.RecommenderBackend.categories.InterestingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -20,7 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
 
    @Autowired
-   private InterestingRepository interRepo;
+   private CategoryRepository interRepo;
 
 
 
@@ -103,7 +96,10 @@ public class UserService {
         return userRepository.findById(id).get();
     }
 
-
+    public List<User> getSimilarUsers(User user){
+        int year = user.getDob().getYear();
+        return userRepository.findUsersByAge( year-2, year+200);
+    }
 
 
 

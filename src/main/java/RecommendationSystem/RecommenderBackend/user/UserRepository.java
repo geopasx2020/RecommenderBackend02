@@ -1,6 +1,7 @@
 package RecommendationSystem.RecommenderBackend.user;
 
 
+import RecommendationSystem.RecommenderBackend.categories.Category;
 import RecommendationSystem.RecommenderBackend.dto.InterestingResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +19,8 @@ extends JpaRepository<User,Long> {
 
     List<User> findByEmailAndPasswordAndRole(String email, String password, String role);
 
-
+    @Query("SELECT u FROM User u WHERE year(u.dob) between ?1 and ?2")
+    List<User> findUsersByAge(int yearOfBirthSince, int yearOfBirthTo);
 
 
 

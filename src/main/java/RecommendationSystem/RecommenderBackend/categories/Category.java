@@ -1,16 +1,15 @@
-package RecommendationSystem.RecommenderBackend.interesting;
+package RecommendationSystem.RecommenderBackend.categories;
 
 import RecommendationSystem.RecommenderBackend.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="interesting")
-public class Interesting {
+//@Table(name="interesting")
+public class Category {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
@@ -31,11 +30,8 @@ public class Interesting {
     private String imagePath;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "selectedInterestings",cascade = CascadeType.PERSIST)
-
+    @ManyToMany(mappedBy = "selectedCategories",cascade = CascadeType.PERSIST)
     private Set<User> users=new HashSet<>();
-
-    public String allInterestings;
 
 
     public Long getId() {
@@ -58,10 +54,7 @@ public class Interesting {
         return users;
     }
 
-    public String getAllInterestings(){
-        return  allInterestings;}
-
-    public Interesting(){
+    public Category(){
 
     }
 

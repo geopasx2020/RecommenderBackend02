@@ -1,8 +1,8 @@
 package RecommendationSystem.RecommenderBackend.user;
 
-import RecommendationSystem.RecommenderBackend.interesting.Interesting;
-import RecommendationSystem.RecommenderBackend.interesting.InterestingRepository;
-import RecommendationSystem.RecommenderBackend.interesting.InterestingService;
+import RecommendationSystem.RecommenderBackend.categories.Category;
+import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
+import RecommendationSystem.RecommenderBackend.categories.InterestingService;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UserController {
     public UserRepository userRepository;
 
     @Autowired
-    private InterestingRepository interestingRepository;
+    private CategoryRepository categoryRepository;
 
 
     public UserController(UserService userService) {
@@ -73,8 +73,8 @@ public class UserController {
     }
 //*****************************************
     @PostMapping("/createInteresting")
-    Interesting createInteresting(@RequestBody Interesting interesting){
-        return interestingRepository.save(interesting);
+    Category createInteresting(@RequestBody Category category){
+        return categoryRepository.save(category);
     }
     @PostMapping("/{userId}/interestings/{interestingId}")
     User createInterestingToUser(
@@ -100,8 +100,8 @@ public class UserController {
     )
     {
         User user=userRepository.findById(userId).get();
-        Interesting interesting = interestingRepository.findById(interestingId).get();
-        user.enrollInteresting(interesting);
+        Category category = categoryRepository.findById(interestingId).get();
+        user.enrollInteresting(category);
 
         return userRepository.save(user);
 
@@ -115,8 +115,8 @@ public class UserController {
     )
     {
         User user=userRepository.findById(userId).get();
-        Interesting interesting = interestingRepository.findById(interestingId).get();
-        user.removeInteresting(interesting);
+        Category category = categoryRepository.findById(interestingId).get();
+        user.removeInteresting(category);
 
         return userRepository.save(user);
 
@@ -137,9 +137,9 @@ public class UserController {
 //    }
 
     @GetMapping("/interestings")
-    public List<Interesting> getInterestings() {
+    public List<Category> getInterestings() {
 
-        return interestingRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     //get interestings by user id

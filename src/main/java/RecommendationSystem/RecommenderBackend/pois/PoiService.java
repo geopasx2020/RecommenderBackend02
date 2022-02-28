@@ -44,7 +44,7 @@ public String deletePoi(Long poiId) {
         poiRepository.deleteById(poiId);
         return message;
     }
-
+/*
     public Poi updatePoi(Poi poi){
 
         Long id= poi.getId();
@@ -56,12 +56,12 @@ public String deletePoi(Long poiId) {
         pnt.setStartTime(poi.getStartTime());
         pnt.setEndTime(poi.getEndTime());
         pnt.setIndoor(poi.getIndoor());
-        pnt.setPoiCategory(poi.getPoiCategory());
+        pnt.setCategory(poi.getPoiCategory());
 
         return poiRepository.save(pnt);
 
     }
-
+*/
 
 
 

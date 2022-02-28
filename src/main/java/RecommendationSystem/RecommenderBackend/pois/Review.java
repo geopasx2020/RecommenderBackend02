@@ -28,6 +28,10 @@ public class Review {
     }
     private int score;
 
+    public Poi getPoi() {
+        return poi;
+    }
+
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;

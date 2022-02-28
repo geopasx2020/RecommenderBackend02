@@ -8,7 +8,10 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import RecommendationSystem.RecommenderBackend.poisCategory.poiCategory;
+import java.util.List;
+
+import RecommendationSystem.RecommenderBackend.categories.Category;
+
 
 @Entity
 @Table(name="poi")
@@ -21,10 +24,8 @@ public class Poi {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "category")
-    private String category;
-    //private Category category;
-
+    //@Column(name = "category")
+    //private String category;
     @Column(name="time_start")
     private String startTime;
 
@@ -45,24 +46,19 @@ public class Poi {
     @Column
     private String imagePath;
 
-    public RecommendationSystem.RecommenderBackend.poisCategory.poiCategory getPoiCategory() {
-        return poiCategory;
-    }
+    @ManyToOne
+    //@ManyToOne(cascade=CascadeType.PERSIST)
+    private Category category;
 
-    public void setPoiCategory(RecommendationSystem.RecommenderBackend.poisCategory.poiCategory poiCategory) {
-        this.poiCategory = poiCategory;
-    }
-
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="category_id")
-    private poiCategory poiCategory;
+    @OneToMany(mappedBy = "poi")
+    private List<Review> reviews;
 
 
     public Poi(){
 
     }
 
-    public Poi(Long id, String title, String category, String startTime, String endTime, String indoor, String imagePath,poiCategory poiCategory) {
+    public Poi(Long id, String title, Category category, String startTime, String endTime, String indoor, String imagePath) {
         Id = id;
         this.title = title;
         this.category = category;
@@ -70,8 +66,6 @@ public class Poi {
         this.endTime = endTime;
         this.indoor = indoor;
         this.imagePath=imagePath;
-        this.poiCategory=poiCategory;
-
     }
 
 
@@ -92,7 +86,6 @@ public class Poi {
                 ", endTime='" + endTime + '\'' +
                 ", indoor='" + indoor + '\'' +
                 ", imagePath='" + imagePath + '\'' +
-                ", poiCategory=" + poiCategory +
                 '}';
     }
 
@@ -108,7 +101,7 @@ public class Poi {
         this.title = title;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
@@ -138,7 +131,7 @@ public class Poi {
         this.indoor = indoor;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
 
         this.category = category;
     }

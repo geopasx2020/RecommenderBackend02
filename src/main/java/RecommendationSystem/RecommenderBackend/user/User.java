@@ -1,16 +1,14 @@
 package RecommendationSystem.RecommenderBackend.user;
 
-import RecommendationSystem.RecommenderBackend.interesting.Interesting;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import RecommendationSystem.RecommenderBackend.RecommenderBackendApplication;
+import RecommendationSystem.RecommenderBackend.categories.Category;
+import RecommendationSystem.RecommenderBackend.pois.Review;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -71,24 +69,27 @@ public class User {
     }
 
     @ManyToMany(cascade = CascadeType.PERSIST,fetch=FetchType.EAGER)
-    @JoinTable(
+    /*@JoinTable(
             name="interesting_select",
             joinColumns =@JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="interesting_id")
-    )
-    Set<Interesting> selectedInterestings;
+    )*/
+    Set<Category> selectedCategories;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Review> reviews;
 
     public User(){
 
     }
 
 
-    public Set<Interesting> getInterestings() {
-        return selectedInterestings;
+    public Set<Category> getInterestings() {
+        return selectedCategories;
     }
 
-    public void setInterestings(Set<Interesting> interestings) {
-        this.selectedInterestings = interestings;
+    public void setInterestings(Set<Category> categories) {
+        this.selectedCategories = categories;
     }
 
     public LocalDate getRegd() {
@@ -114,8 +115,8 @@ public class User {
 
     }
 
-    public User(Set<Interesting> interestings) {
-        this.selectedInterestings = interestings;
+    public User(Set<Category> categories) {
+        this.selectedCategories = categories;
     }
 
     public Long getId() {
@@ -189,18 +190,25 @@ public class User {
     }
 
 
-    public void enrollInteresting(Interesting insertInteresting) {
+    public void enrollInteresting(Category insertCategory) {
 
-        selectedInterestings.add(insertInteresting);
+        selectedCategories.add(insertCategory);
     }
 
-    public void removeInteresting(Interesting insertInteresting) {
+    public void removeInteresting(Category insertCategory) {
 
-        selectedInterestings.remove(insertInteresting);
+        selectedCategories.remove(insertCategory);
     }
 
+    public Set<Review> getReviews() {
+        return reviews;
+    }
 
-
-
-
+    public double getAverageScore(){
+        int sum = 0;
+        for(Review r : reviews){
+            sum += r.getScore();
+        }
+        return 1.0 * sum / reviews.size();
+    }
 }
