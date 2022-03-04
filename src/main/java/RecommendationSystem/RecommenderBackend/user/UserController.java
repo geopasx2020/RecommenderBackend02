@@ -3,6 +3,7 @@ package RecommendationSystem.RecommenderBackend.user;
 import RecommendationSystem.RecommenderBackend.categories.Category;
 import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
 import RecommendationSystem.RecommenderBackend.categories.InterestingService;
+import RecommendationSystem.RecommenderBackend.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +67,11 @@ public class UserController {
         return  userService.updateUser(user);
     }
 
-    @JsonIgnore
+    //@JsonIgnore
     @GetMapping({ "/User/{email}/{password}/{role}" })
-    public User login(@PathVariable String email,@PathVariable String password,@PathVariable String role) {
-        return userRepository.findByEmailAndPasswordAndRole(email, password,role).get(0);
+    public UserDTO login(@PathVariable String email,@PathVariable String password,@PathVariable String role) {
+        User user = userRepository.findByEmailAndPasswordAndRole(email, password,role).get(0);
+        return new UserDTO(user);
     }
 //*****************************************
     @PostMapping("/createInteresting")

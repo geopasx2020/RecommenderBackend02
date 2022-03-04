@@ -110,8 +110,7 @@ public class PoiController {
         List<Poi> pois2 =  poiRepository.findByCategoryIn(myInterests); //TODO better sorting?
 
         //##3
-        List<User> users2 = userService.getSimilarUsers(user); //TODO only age?
-        List<Poi> pois3 =  poiRepository.findByUsersReviews(users);
+        List<Poi> pois3 =  getRecommendationsBasedOnReviewSimilarity(user);
 
 
 
@@ -119,17 +118,22 @@ public class PoiController {
         // TODO sort by score?
 
         //return poiService.getPois();
-        return pois1;
+        return pois3;
     }
 
-    private void f(User user){
+    private List<Poi> getRecommendationsBasedOnReviewSimilarity(User alice){
+        HashMap<Poi, float[]> res3 = new HashMap<>();
+
         List<User> users = userService.getUsers();
         HashMap<Long, Review> aliceReviews = new HashMap<>();
-        for(Review r : user.getReviews()){
+
+        for(Review r : alice.getReviews()){
             aliceReviews.put(r.getPoi().getId(), r);
         }
-        double aliceAvg = user.getAverageScore();
+        double aliceAvg = alice.getAverageScore();
+        System.out.println("avg:"+aliceAvg+" of"+aliceReviews.size());
 
+        users.remove(alice); //remove Alice
         for(User u : users){
             List<Review> notRatedByAlice = new ArrayList<>();
             double uAvg = u.getAverageScore();
@@ -150,17 +154,59 @@ public class PoiController {
                 }else{
                     notRatedByAlice.add(r);
                 }
-
-
             }
-            double simalirity = distSum / ( Math.sqrt(aliceSum) * Math.sqrt(uSum) );
 
-            //simalirity * r.getScore()-
+            double similarity = (distSum==0) ?0 :distSum / ( Math.sqrt(aliceSum) * Math.sqrt(uSum) );
+            System.out.println("user:"+u.getId()+" similarity:"+similarity +" "+notRatedByAlice.size());
 
+            if(similarity != 0) {
+                for (Review review : notRatedByAlice) {
+                    float[] f = res3.get(review.getPoi());
+                    if (f == null) {
+                        f = new float[]{0, 0};
+                        res3.put(review.getPoi(), f);
+                    }
+                    f[0] += similarity * review.getScore(); //nominator
+                    f[1] += Math.abs(similarity);         //denominator
+                }
+            }
+        }
+
+        //TODO add confidence for score (per POI), based on count of user reviews
+
+        List<Recommendation> recommendations = new ArrayList<>();
+        for(Map.Entry<Poi, float[]> entry : res3.entrySet()){
+            float f[] = entry.getValue();
+            double score = aliceAvg + (f[0]/f[1]);
+            recommendations.add(new Recommendation(entry.getKey(), score) );
         }
 
 
+
+        Collections.sort(recommendations);
+        List<Poi> finalPois = new ArrayList<>();
+        for(Recommendation r : recommendations){
+            System.out.println("final recemmendation: "+r.poi.getId()+" score:"+r.score);
+            finalPois.add(r.poi);
+        }
+        return finalPois;
     }
 
+    private static class Recommendation implements Comparable<Recommendation> {
+        Poi poi;
+        double score;
+
+        public Recommendation(Poi poi, double score) {
+            this.poi = poi;
+            this.score = score;
+        }
+
+        @Override
+        public int compareTo(Recommendation o) {
+            if(this.score < o.score){ return -1; }
+            else if( this.score == o.score){ return 0;}
+            else{ return 1; }
+        }
+    }
 
 }
