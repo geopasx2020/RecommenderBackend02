@@ -4,6 +4,7 @@ import RecommendationSystem.RecommenderBackend.categories.Category;
 import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
 import RecommendationSystem.RecommenderBackend.categories.InterestingService;
 import RecommendationSystem.RecommenderBackend.dto.UserDTO;
+import RecommendationSystem.RecommenderBackend.dto.User2DTO;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class UserController {
 
         return userService.getUsers();
     }
+
 
     @PostMapping
     public void registerNewUser(@RequestBody User user) {

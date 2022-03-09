@@ -112,13 +112,46 @@ public class PoiController {
         //##3
         List<Poi> pois3 =  getRecommendationsBasedOnReviewSimilarity(user);
 
-
-
-
         // TODO sort by score?
 
         //return poiService.getPois();
-        return pois3;
+        List<Poi> mixed = mix(pois3, pois2, pois1);
+        System.out.println("count:"+" "+ pois1.size()+" "+pois2.size()+" "+pois3.size()+" "+mixed.size());
+        return mixed;
+    }
+
+    private List<Poi> mix(List<Poi>... lists){
+        double weights[] = {0.8, 0.15, 0.05};
+        int window = 6;
+        List<Poi> result = new ArrayList<>();
+        int index[] = {0, 0, 0};
+        Set<Poi> included = new HashSet<>();
+
+        int currentList = 0;
+
+        while(true) {
+
+            int start = index[currentList];
+            int end = index[currentList] + (int) Math.ceil(window * weights[currentList]);
+            System.out.println("picking "+currentList+" "+start+" "+end);
+            for (int i = start; i < end && i < lists[currentList].size(); i++) {
+                Poi p = lists[currentList].get(i);
+                if(included.contains(p) == false) {
+                    result.add(p);
+                    included.add(p);
+                }
+                index[currentList]++;
+            }
+            int emptyLists = 0;
+            do {
+                currentList = (currentList + 1) % lists.length;
+                emptyLists++;
+                System.out.println("emptyLists "+emptyLists);
+                if(emptyLists == 4){ return result; }
+            }while( index[currentList] >= lists[currentList].size() );
+            System.out.println("count:"+" "+ lists[0].size()+" "+lists[1].size()+" "+lists[2].size()+" "+result.size());
+        }
+
     }
 
     private List<Poi> getRecommendationsBasedOnReviewSimilarity(User alice){
@@ -181,14 +214,13 @@ public class PoiController {
             recommendations.add(new Recommendation(entry.getKey(), score) );
         }
 
-
-
         Collections.sort(recommendations);
         List<Poi> finalPois = new ArrayList<>();
         for(Recommendation r : recommendations){
-            System.out.println("final recemmendation: "+r.poi.getId()+" score:"+r.score);
+            System.out.println("final recommendation: "+r.poi.getId()+" score:"+r.score);
             finalPois.add(r.poi);
         }
+
         return finalPois;
     }
 
@@ -203,9 +235,9 @@ public class PoiController {
 
         @Override
         public int compareTo(Recommendation o) {
-            if(this.score < o.score){ return -1; }
+            if(this.score < o.score){ return +1; }
             else if( this.score == o.score){ return 0;}
-            else{ return 1; }
+            else{ return -1; }
         }
     }
 

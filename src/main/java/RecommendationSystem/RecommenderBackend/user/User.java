@@ -3,6 +3,8 @@ package RecommendationSystem.RecommenderBackend.user;
 import RecommendationSystem.RecommenderBackend.RecommenderBackendApplication;
 import RecommendationSystem.RecommenderBackend.categories.Category;
 import RecommendationSystem.RecommenderBackend.pois.Review;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -68,6 +70,7 @@ public class User {
         this.gender = gender;
     }
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.PERSIST,fetch=FetchType.EAGER)
     /*@JoinTable(
             name="interesting_select",
@@ -76,6 +79,7 @@ public class User {
     )*/
     Set<Category> selectedCategories;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews;
 

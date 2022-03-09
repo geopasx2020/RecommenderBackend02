@@ -136,7 +136,13 @@ public class Poi {
         this.category = category;
     }
 
-
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Poi == false) return  false;
+        if(this.Id == null) return false;
+        if(((Poi)o).Id == null) return false;
+        return this.Id == ((Poi)o).Id;
+    }
 
 
 
