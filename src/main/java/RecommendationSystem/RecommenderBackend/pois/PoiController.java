@@ -57,6 +57,9 @@ public class PoiController {
         return poiRepository.findById(id).get();
     }
 
+
+
+
     /*
     HTTP1
     GET
@@ -93,6 +96,7 @@ public class PoiController {
 
     @GetMapping(path = "/recommendations/{userId}")
     public List<Poi> getRecommendations(@PathVariable("userId") long userId) {
+    //public List<Poi> getRecommendations(@PathVariable("userId"), long userId, int pageSize, int pageNo) {
         System.out.println("getRecommendations()");
         //1) similar users : reviewd pois
         //2) interesting categories: all pois
@@ -107,7 +111,23 @@ public class PoiController {
 
         //##2
         Collection<Category> myInterests = user.getInterestings();
-        List<Poi> pois2 =  poiRepository.findByCategoryIn(myInterests); //TODO better sorting?
+        // visits * avgScore / maxScore (+absVisitsPerCategory)
+        double baseScore = user.getAverageScore();
+        List<Category> favoriteCategories = reviewRepository.avgScoreForUserAndCategory(user, baseScore );
+        System.out.println("baseScore "+baseScore);
+        System.out.println("favoriteCategories "+favoriteCategories);
+
+                /*
+        for( Object[] avgScore : reviewRepository.avgScoreForUserAndCategory(user, user.getAverageScore() ) ){
+            System.out.println("cat "+avgScore[0]);
+
+            System.out.println("score "+avgScore[1]);
+            if()
+        }*/
+        System.out.println("myInterests "+myInterests);
+        myInterests.addAll(favoriteCategories);
+        System.out.println("myInterests "+myInterests);
+        List<Poi> pois2 =  poiRepository.findByCategoryInOrderByAverageScore(myInterests); //TODO better sorting?
 
         //##3
         List<Poi> pois3 =  getRecommendationsBasedOnReviewSimilarity(user);
@@ -117,7 +137,9 @@ public class PoiController {
         //return poiService.getPois();
         List<Poi> mixed = mix(pois3, pois2, pois1);
         System.out.println("count:"+" "+ pois1.size()+" "+pois2.size()+" "+pois3.size()+" "+mixed.size());
+        //return mixed.subList(0,5);
         return mixed;
+//        return pois1;
     }
 
     private List<Poi> mix(List<Poi>... lists){

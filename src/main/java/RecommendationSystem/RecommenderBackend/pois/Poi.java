@@ -43,6 +43,12 @@ public class Poi {
     @Column(name="indoor")
     private String indoor;
 
+    private Float averageScore; //Nullable
+
+    private Float longtitude; //Nullable
+
+    private Float latitude; //Nullable
+
     @Column
     private String imagePath;
 
@@ -122,9 +128,38 @@ public class Poi {
     }
 
     public String getIndoor() {
-
         return indoor;
     }
+
+    public Float getAverageScore() {
+        return averageScore;
+    }
+
+    public Float getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(Float longtitude) {
+        this.longtitude = longtitude;
+    }
+
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public void calculateAverageScore() {
+        if( reviews.isEmpty() ) { this.averageScore = null; }
+        int sum = 0;
+        for(Review r : reviews){
+            sum += r.getScore();
+        }
+        this.averageScore = ((float)sum) / reviews.size();
+    }
+
 
     public void setIndoor(String indoor) {
 

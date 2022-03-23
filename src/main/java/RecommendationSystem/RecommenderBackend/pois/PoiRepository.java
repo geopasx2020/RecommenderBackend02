@@ -14,10 +14,14 @@ public interface PoiRepository extends JpaRepository<Poi,Long> {
    //Page<Poi> findById(@RequestParam("id") Long id, Pageable pageable);
    //List<Poi> findByCategoryIn(Collection<Interesting> categories);  //select p from Poi where p.categoru in :categories
 
-   List<Poi> findByCategoryIn(Collection<Category> categories);  //select p from Poi where p.categoru in :categories
+   //List<Poi> findByCategoryIn(Collection<Category> categories);  //select p from Poi where p.categoru in :categories
+   List<Poi> findByCategoryInOrderByAverageScore(Collection<Category> categories);  //select p from Poi where p.categoru in :categories
 
    //@Query("SELECT u FROM User u WHERE year(u.dob) between ?1 and ?2")
    //@Query("select p from Poi p inner join Review r WHERE r.user in ?1 ")
-   @Query("select distinct p from Review r inner join r.poi as p WHERE r.user in ?1 ORDER by r.score")
-   List<Poi> findByUsersReviews(Collection<User> user);  //select p from Poi where p.categoru in :categories
+   @Query("select distinct p from Review r inner join r.poi as p WHERE r.user in ?1 ORDER by p.averageScore")
+   List<Poi> findByUsersReviews(Collection<User> users);  //select p from Poi where p.categoru in :categories
+
+
+   //em.createQuery("select distinct p from Review r inner join r.poi as p WHERE r.user in ?1 AND USER.AGE= ?2 ORDER by r.score").bindParameter("users", users).execute()
 }

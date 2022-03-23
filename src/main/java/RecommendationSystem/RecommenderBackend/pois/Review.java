@@ -43,6 +43,7 @@ public class Review {
         this.poi = poi;
         this.score = score;
         this.user = user;
+        poi.calculateAverageScore();
     }
 
     public Review(int score) {

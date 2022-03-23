@@ -98,7 +98,7 @@ public class UserService {
 
     public List<User> getSimilarUsers(User user){
         int year = user.getDob().getYear();
-        return userRepository.findUsersByAge( year-2, year+200);
+        return userRepository.findUsersByAge( year-2, year+8);
     }
 
 
