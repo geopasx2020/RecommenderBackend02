@@ -2,10 +2,12 @@ package RecommendationSystem.RecommenderBackend.user;
 import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
 import RecommendationSystem.RecommenderBackend.categories.InterestingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -15,7 +17,7 @@ public class UserService {
    @Autowired
    private CategoryRepository interRepo;
 
-
+   private Map<String, User> sessions = new HashMap<>();
 
 
     @Autowired
@@ -101,8 +103,36 @@ public class UserService {
         return userRepository.findUsersByAge( year-2, year+8);
     }
 
+    String generateRandomSessionId(){
+        Random r = new Random();
+        return "sdgdfg"+r.nextLong();
+    }
 
+    public User login(String email, String password){
+        User user = userRepository.findByEmailAndPassword(email, password);
+        /*if(user != null){
+            String sessionId = generateRandomSessionId();
+            sessions.put(sessionId, user);
+        }*/
+        return user;
+    }
 
+    public String startSession(User user){
+        if(user != null){
+            String sessionId = generateRandomSessionId();
+            sessions.put(sessionId, user);
+            return sessionId;
+        }
+        return  null;
+    }
+
+    public User getLoggedInUser(String sessionId){
+        User user = sessions.get(sessionId);
+        if(user == null){ throw new ResponseStatusException(
+                //HttpStatus.NOT_FOUND, "User Not Found"); }
+                HttpStatus.UNAUTHORIZED, "User Not Found"); }
+        return user;
+    }
 
     }
 

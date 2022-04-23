@@ -18,6 +18,7 @@ extends JpaRepository<User,Long> {
     Optional<User> findUserByEmail(String email);
 
     List<User> findByEmailAndPasswordAndRole(String email, String password, String role);
+    User findByEmailAndPassword(String email, String password);
 
     @Query("SELECT u FROM User u WHERE year(u.dob) between ?1 and ?2")
     List<User> findUsersByAge(int yearOfBirthSince, int yearOfBirthTo);

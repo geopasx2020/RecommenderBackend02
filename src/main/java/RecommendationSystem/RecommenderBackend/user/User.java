@@ -25,7 +25,7 @@ public class User {
     @Transient // calculate age
     private Integer age;
 
-    @Column(name="email")
+    @Column(name="email", unique = true)
     private String email;
 
     @Column(name="password")
@@ -189,6 +189,10 @@ public class User {
         return role;
     }
 
+    public boolean isAdmin(){
+        return "Admin".equals(this.role);
+    }
+
     public void setRole(String role) {
         this.role = role;
     }
@@ -209,6 +213,7 @@ public class User {
     }
 
     public double getAverageScore(){
+        if(reviews.isEmpty()){ return 0; }
         int sum = 0;
         for(Review r : reviews){
             sum += r.getScore();

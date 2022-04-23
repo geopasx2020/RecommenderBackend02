@@ -53,7 +53,7 @@ public class Poi {
     private String imagePath;
 
     @ManyToOne
-    //@ManyToOne(cascade=CascadeType.PERSIST)
+//    @ManyToOne(fetch=FetchType.LAZY)
     private Category category;
 
     @OneToMany(mappedBy = "poi")

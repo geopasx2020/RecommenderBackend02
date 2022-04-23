@@ -1,21 +1,27 @@
 package RecommendationSystem.RecommenderBackend.pois;
 import RecommendationSystem.RecommenderBackend.categories.Category;
+import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
 import RecommendationSystem.RecommenderBackend.user.User;
 import RecommendationSystem.RecommenderBackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins="http://localhost:4200",allowedHeaders={"*"}, allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins="*",allowedHeaders={"*"})
 @RequestMapping(path = "pois")
 public class PoiController {
     @Autowired
     private PoiRepository poiRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     PoiService poiService;
@@ -57,17 +63,6 @@ public class PoiController {
         return poiRepository.findById(id).get();
     }
 
-
-
-
-    /*
-    HTTP1
-    GET
-    /api/poi/23/review?p=2
-    Accept-Langaue: en
-
-    {score: 2}
-     */
     @PostMapping("/{id}/review")
     public Poi reviewPoi(@PathVariable("id") Long poiId, @RequestBody RecommendationSystem.RecommenderBackend.dto.Review frontReview){
         System.out.println(frontReview.getScore());
@@ -88,14 +83,13 @@ public class PoiController {
         //return  poiService.updatePoi(poi);
     }
 
-    @GetMapping(path = "/r")
-    public List<Poi> getRecommendations2() {
-        //return new ArrayList<Poi>();
-        return getRecommendations(79);
-    }
+
 
     @GetMapping(path = "/recommendations/{userId}")
     public List<Poi> getRecommendations(@PathVariable("userId") long userId) {
+//    public List<Poi> getRecommendations(@CookieValue("sessionId") String sessionId ) {
+//        long userId = userService.getLoggedInUser(sessionId).getId();
+
     //public List<Poi> getRecommendations(@PathVariable("userId"), long userId, int pageSize, int pageNo) {
         System.out.println("getRecommendations()");
         //1) similar users : reviewd pois
@@ -262,5 +256,6 @@ public class PoiController {
             else{ return -1; }
         }
     }
+
 
 }

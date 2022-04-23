@@ -3,6 +3,7 @@ package RecommendationSystem.RecommenderBackend.pois;
 import RecommendationSystem.RecommenderBackend.pois.Poi;
 import RecommendationSystem.RecommenderBackend.pois.PoiRepository;
 import RecommendationSystem.RecommenderBackend.pois.PoiService;
+import RecommendationSystem.RecommenderBackend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,13 @@ public class PoiService {
 @Autowired
 public List<Poi> getPois()
 {
+
     return poiRepository.findAll();
 }
 
     public List<Poi> getRecommendations()
     {
+
         return poiRepository.findAll();
     }
 
@@ -62,7 +65,9 @@ public String deletePoi(Long poiId) {
 
     }
 */
-
+public void addNewPoi(Poi poi) {
+       poiRepository.save(poi);
+}
 
 
 }
