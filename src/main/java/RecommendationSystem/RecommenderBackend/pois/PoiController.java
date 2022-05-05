@@ -1,13 +1,13 @@
 package RecommendationSystem.RecommenderBackend.pois;
 import RecommendationSystem.RecommenderBackend.categories.Category;
 import RecommendationSystem.RecommenderBackend.categories.CategoryRepository;
+import RecommendationSystem.RecommenderBackend.dto.PoiDTO;
 import RecommendationSystem.RecommenderBackend.user.User;
 import RecommendationSystem.RecommenderBackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.websocket.server.PathParam;
 import java.util.*;
 
 @RestController
@@ -256,6 +256,31 @@ public class PoiController {
             else{ return -1; }
         }
     }
+
+    @PostMapping
+    public void addNewPoi(@RequestBody PoiDTO poiDTO) {
+        Poi poi = new Poi();
+        poi.setTitle(poiDTO.getTitle());
+
+        Category category = categoryRepository.findById(poiDTO.getCategoryId()).get();
+        poi.setCategory(category);
+        poiService.addNewPoi(poi);
+    }
+
+    /*
+    private final StorageServiceInterface storageService;
+
+    @Autowired
+    public PoiController(StorageServiceInterface storageService) {
+        this.storageService = storageService;
+        //Sy
+    }
+*/
+    @PostMapping(path = "/images")
+    public void uploadImage(@RequestBody MultipartFile file) {
+        return;
+    }
+
 
 
 }

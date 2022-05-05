@@ -22,12 +22,13 @@ public class InterestingController {
     CategoryRepository categoryRepository;
     @Autowired
     PoiRepository poiRepository;
-    /*
+
         @GetMapping
         List<Category> getinterestings() {
 
             return categoryRepository.findAll();
         }
+        /*
 
         @PostMapping
         Category createInteresting(@RequestBody Category category) {

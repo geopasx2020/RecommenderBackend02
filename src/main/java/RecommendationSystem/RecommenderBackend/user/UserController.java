@@ -101,6 +101,8 @@ public class UserController {
         if(user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found") ;
         String sessionId = userService.startSession(user);
 
+        //https://stackoverflow.com/questions/50076352/angular-is-not-sending-the-cookie-received-in-set-cookie-even-if-withcredentials
+
         Cookie cookie = new Cookie("sessionId", sessionId);
         // expires in 1 hour
         cookie.setMaxAge(60 * 60);
@@ -108,10 +110,12 @@ public class UserController {
         //cookie.setSecure(true);
 //        cookie.setDomain("localhost:8080");
         cookie.setHttpOnly(false);
+        cookie.setSecure(false);
         cookie.setPath("/");
         httpResponse.addCookie(cookie);
         return new UserDTO(user);
 //      return null;
+
     }
 
     //*****************************************
@@ -201,7 +205,6 @@ public class UserController {
         }
         return "Dummy";
     }
-
 
 
 

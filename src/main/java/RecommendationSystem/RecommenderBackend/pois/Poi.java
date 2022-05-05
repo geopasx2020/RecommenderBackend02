@@ -54,7 +54,7 @@ public class Poi {
 
     @ManyToOne
 //    @ManyToOne(fetch=FetchType.LAZY)
-    private Category category;
+    private Category category; //{id:}
 
     @OneToMany(mappedBy = "poi")
     private List<Review> reviews;
@@ -160,6 +160,19 @@ public class Poi {
         this.averageScore = ((float)sum) / reviews.size();
     }
 
+    public Poi(Long id, String title, String startTime, String endTime, String indoor, Float averageScore, Float longtitude, Float latitude, String imagePath, Category category) {
+        Id = id;
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.indoor = indoor;
+        this.averageScore = averageScore;
+        this.longtitude = longtitude;
+        this.latitude = latitude;
+        this.imagePath = imagePath;
+        this.category = category;
+
+    }
 
     public void setIndoor(String indoor) {
 

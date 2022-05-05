@@ -66,6 +66,7 @@ public String deletePoi(Long poiId) {
     }
 */
 public void addNewPoi(Poi poi) {
+    //poi.setCategory({id});
        poiRepository.save(poi);
 }
 
