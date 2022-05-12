@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import RecommendationSystem.RecommenderBackend.categories.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -51,6 +52,9 @@ public class Poi {
 
     @Column
     private String imagePath;
+
+    @OneToOne
+    private ImageData image;
 
     @ManyToOne
 //    @ManyToOne(fetch=FetchType.LAZY)
@@ -192,13 +196,16 @@ public class Poi {
         return this.Id == ((Poi)o).Id;
     }
 
+    @JsonIgnore
+    public ImageData getImage() {
+        return image;
+    }
+    public long getImageId() {
+        return image.getId();
+    }
 
 
-
-
-
-
-
-
-
+    public void setImage(ImageData image) {
+        this.image = image;
+    }
 }

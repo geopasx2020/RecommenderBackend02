@@ -5,13 +5,19 @@ import RecommendationSystem.RecommenderBackend.dto.PoiDTO;
 import RecommendationSystem.RecommenderBackend.user.User;
 import RecommendationSystem.RecommenderBackend.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @RestController
 @CrossOrigin(origins="http://localhost:4200",allowedHeaders={"*"}, allowCredentials = "true")
+//@CrossOrigin(origins="*",allowedHeaders={"*"})
 //@CrossOrigin(origins = "http://localhost:4200")
 //@CrossOrigin(origins="*",allowedHeaders={"*"})
 @RequestMapping(path = "pois")
@@ -258,29 +264,38 @@ public class PoiController {
     }
 
     @PostMapping
-    public void addNewPoi(@RequestBody PoiDTO poiDTO) {
+    public void addNewPoi(@Valid @RequestBody PoiDTO poiDTO) {
         Poi poi = new Poi();
         poi.setTitle(poiDTO.getTitle());
-
+        poi.setIndoor(poiDTO.getIndoor());
+        poi.setEndTime(poiDTO.getEndTime());
+        poi.setLatitude(poiDTO.getLatitude());
+        poi.setLongtitude(poiDTO.getLongtitude());
+        poi.setStartTime(poi.getStartTime());
         Category category = categoryRepository.findById(poiDTO.getCategoryId()).get();
         poi.setCategory(category);
+        ImageData image = poiService.getImage(poiDTO.getImageId());
+        poi.setImage(image);
         poiService.addNewPoi(poi);
     }
 
-    /*
-    private final StorageServiceInterface storageService;
-
-    @Autowired
-    public PoiController(StorageServiceInterface storageService) {
-        this.storageService = storageService;
-        //Sy
-    }
-*/
     @PostMapping(path = "/images")
-    public void uploadImage(@RequestBody MultipartFile file) {
-        return;
+    public long uploadImage(@RequestBody MultipartFile file) {
+        System.out.println("uploadImage() name="+file.getOriginalFilename());
+        try{
+            InputStream is = file.getInputStream();
+            byte data[] = is.readAllBytes();
+            long newImageId = poiService.uploadImage("test", data);
+            return newImageId;
+
+        }catch(IOException ex){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "image error") ;
+        }
     }
 
-
+    @GetMapping(path = "/images/{id}", produces = "image/*")
+    public byte[] getImage(@PathVariable("id") long id){
+        return poiService.getImage(id).getData();
+    }
 
 }

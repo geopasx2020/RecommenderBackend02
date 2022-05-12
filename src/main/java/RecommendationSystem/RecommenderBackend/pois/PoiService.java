@@ -15,7 +15,11 @@ public class PoiService {
 
     @Autowired
     private  PoiRepository poiRepository;
-//    public List<Poi> getAllPois();
+    @Autowired
+    private  ImageDataRepository imageDataRepository;
+
+
+    //    public List<Poi> getAllPois();
 //    public boolean deleteFile(Long id,String file);
 @Autowired
 public List<Poi> getPois()
@@ -65,10 +69,21 @@ public String deletePoi(Long poiId) {
 
     }
 */
-public void addNewPoi(Poi poi) {
-    //poi.setCategory({id});
-       poiRepository.save(poi);
-}
+    public void addNewPoi(Poi poi) {
+        //poi.setCategory({id});
+           poiRepository.save(poi);
+    }
 
+    public long uploadImage(String name, byte[] data){
+        //byte data[] = new byte[30];
+        ImageData image = new ImageData(name, data);
+        imageDataRepository.save(image);
+        return image.getId();
+    }
+
+    public ImageData getImage(long id){
+        ImageData imageData = imageDataRepository.findById(id).get();
+        return  imageData;
+    }
 
 }
